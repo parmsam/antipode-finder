@@ -96,9 +96,7 @@ function updateMarker(map, marker, lat, lng) {
 async function reverseGeocode(lat, lng, side) {
   const url = `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=json`;
   try {
-    const res = await fetch(url, {
-      headers: { 'Accept-Language': 'en' },
-    });
+    const res = await fetch(url);
     const data = await res.json();
     const name = buildPlaceName(data);
 
@@ -169,22 +167,24 @@ function debounce(fn, delay) {
   };
 }
 
+// Uses Photon (komoot) for forward geocoding — designed for browser use,
+// explicit CORS support, no API key or usage policy restrictions.
 async function searchPlace(query, side) {
   if (!query || query.trim().length < 2) return;
-  const url = `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(query)}&format=json&limit=1`;
+  const url = `https://photon.komoot.io/api/?q=${encodeURIComponent(query)}&limit=1&lang=en`;
   try {
-    const res = await fetch(url, {
-      headers: { 'Accept-Language': 'en' },
-    });
-    const results = await res.json();
-    if (!results.length) {
+    const res = await fetch(url);
+    const data = await res.json();
+    const features = data.features || [];
+    if (!features.length) {
       showToast('No results found for "' + query + '"');
       return;
     }
 
-    const { lat, lon } = results[0];
+    // Photon returns GeoJSON: coordinates are [lng, lat]
+    const [lng, lat] = features[0].geometry.coordinates;
     const parsedLat = parseFloat(lat);
-    const parsedLng = parseFloat(lon);
+    const parsedLng = parseFloat(lng);
 
     if (side === 'origin') {
       setPoint(parsedLat, parsedLng);
