@@ -17,108 +17,118 @@
   <!-- Leaflet CSS -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
   <link rel="stylesheet" href="style.css" />
 </head>
-<body>
+<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col">
 
-  <header>
-    <h1>Antipode Finder</h1>
-    <p class="subtitle">Find the point on Earth directly opposite any location</p>
+  <header class="bg-white border-b border-slate-200 py-5 px-6 text-center shadow-sm">
+    <h1 class="text-2xl font-bold tracking-tight">Antipode Finder</h1>
+    <p class="text-slate-500 text-sm mt-1">Find the point on Earth directly opposite any location</p>
   </header>
 
-  <section class="controls">
-    <div class="search-group">
-      <label for="search-origin">Search origin</label>
-      <input type="search" id="search-origin" placeholder="e.g. New York, Paris…" autocomplete="off" />
+  <section class="flex flex-wrap items-end gap-3 px-6 py-4 bg-white border-b border-slate-200">
+    <div class="flex-1 min-w-40">
+      <label for="search-origin" class="block text-xs font-semibold uppercase tracking-widest text-blue-700 mb-1.5">Search origin</label>
+      <input type="search" id="search-origin" placeholder="e.g. New York, Paris…" autocomplete="off"
+        class="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm text-slate-800 bg-slate-50 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-colors" />
     </div>
-    <div class="search-group">
-      <label for="search-antipode">Search antipode</label>
-      <input type="search" id="search-antipode" placeholder="e.g. Sydney, Tokyo…" autocomplete="off" />
+    <div class="flex-1 min-w-40">
+      <label for="search-antipode" class="block text-xs font-semibold uppercase tracking-widest text-orange-600 mb-1.5">Search antipode</label>
+      <input type="search" id="search-antipode" placeholder="e.g. Sydney, Tokyo…" autocomplete="off"
+        class="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm text-slate-800 bg-slate-50 outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-200 transition-colors" />
     </div>
-    <div class="control-buttons">
-      <button id="btn-geolocate" title="Use my location">
+    <div class="flex gap-2 items-center flex-shrink-0">
+      <button id="btn-geolocate" title="Use my location"
+        class="inline-flex items-center gap-1.5 px-4 py-2 bg-blue-500 hover:bg-blue-600 active:scale-95 text-white text-sm font-semibold rounded-lg transition-all whitespace-nowrap cursor-pointer">
         <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M1 12h4M19 12h4"/><circle cx="12" cy="12" r="9" stroke-dasharray="4 2"/></svg>
         My Location
       </button>
-      <button id="btn-share" title="Copy share link">
+      <button id="btn-share" title="Copy share link"
+        class="inline-flex items-center gap-1.5 px-4 py-2 bg-white hover:bg-slate-50 active:scale-95 text-slate-800 text-sm font-semibold rounded-lg border border-slate-200 transition-all whitespace-nowrap cursor-pointer">
         <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
         Share
       </button>
     </div>
   </section>
 
-  <main class="maps">
-    <div class="map-panel map-panel--origin">
-      <div class="map-header map-header--origin">
-        <span class="map-label">Your Location</span>
-        <span class="map-place" id="origin-place">Click the map to begin</span>
+  <main class="grid grid-cols-2 gap-4 px-6 py-4 flex-1 maps">
+    <div class="rounded-xl overflow-hidden shadow-md bg-white flex flex-col">
+      <div class="flex items-baseline gap-2 px-3.5 py-2.5 bg-blue-500 text-white flex-shrink-0">
+        <span class="font-bold text-xs uppercase tracking-widest flex-shrink-0">Your Location</span>
+        <span class="text-sm opacity-90 overflow-hidden text-ellipsis whitespace-nowrap" id="origin-place">Click the map to begin</span>
       </div>
-      <div id="map-origin"></div>
+      <div id="map-origin" class="flex-1"></div>
     </div>
-    <div class="map-panel map-panel--antipode">
-      <div class="map-header map-header--antipode">
-        <span class="map-label">Antipode</span>
-        <span class="map-place" id="antipode-place">—</span>
+    <div class="rounded-xl overflow-hidden shadow-md bg-white flex flex-col">
+      <div class="flex items-baseline gap-2 px-3.5 py-2.5 bg-orange-500 text-white flex-shrink-0">
+        <span class="font-bold text-xs uppercase tracking-widest flex-shrink-0">Antipode</span>
+        <span class="text-sm opacity-90 overflow-hidden text-ellipsis whitespace-nowrap" id="antipode-place">—</span>
       </div>
-      <div id="map-antipode"></div>
+      <div id="map-antipode" class="flex-1"></div>
     </div>
   </main>
 
-  <section class="info">
-    <div class="coord-cards">
-      <div class="coord-card coord-card--origin">
-        <div class="coord-card__label">Origin</div>
-        <div class="coord-card__value" id="origin-coords">—</div>
+  <section class="px-6 py-4">
+    <div class="grid grid-cols-2 gap-3 mb-3 coord-cards">
+      <div class="bg-white rounded-lg px-4 py-3 shadow-sm border-l-4 border-blue-500">
+        <div class="text-xs font-bold uppercase tracking-widest text-slate-400 mb-1">Origin</div>
+        <div class="text-sm font-mono text-slate-800" id="origin-coords">—</div>
       </div>
-      <div class="coord-card coord-card--antipode">
-        <div class="coord-card__label">Antipode</div>
-        <div class="coord-card__value" id="antipode-coords">—</div>
+      <div class="bg-white rounded-lg px-4 py-3 shadow-sm border-l-4 border-orange-500">
+        <div class="text-xs font-bold uppercase tracking-widest text-slate-400 mb-1">Antipode</div>
+        <div class="text-sm font-mono text-slate-800" id="antipode-coords">—</div>
       </div>
     </div>
-    <div class="facts" id="facts" hidden>
-      <div class="fact">
-        <span class="fact__icon">🌍</span>
-        <span class="fact__text">Distance through Earth: <strong>~12,742 km</strong> (Earth's diameter)</span>
+    <div class="flex flex-wrap gap-2.5" id="facts" hidden>
+      <div class="flex items-center gap-2 bg-white rounded-lg px-3.5 py-2 shadow-sm text-sm">
+        <span class="text-lg flex-shrink-0">🌍</span>
+        <span>Distance through Earth: <strong>~12,742 km</strong> (Earth's diameter)</span>
       </div>
-      <div class="fact" id="fact-ocean">
-        <span class="fact__icon" id="fact-ocean-icon">🌊</span>
-        <span class="fact__text">Your antipode is <strong id="fact-ocean-text">…</strong></span>
+      <div class="flex items-center gap-2 bg-white rounded-lg px-3.5 py-2 shadow-sm text-sm" id="fact-ocean">
+        <span class="text-lg flex-shrink-0" id="fact-ocean-icon">🌊</span>
+        <span>Your antipode is <strong id="fact-ocean-text">…</strong></span>
       </div>
     </div>
   </section>
 
-  <section class="about">
-    <details open>
-      <summary><h2>What is an antipode?</h2></summary>
-      <div class="about-body">
-        <p>Your antipode is the point on Earth's surface directly opposite you — if you could tunnel straight through the center of the planet, you'd pop out there. For most people on land, their antipode is in the middle of the ocean!</p>
-        <p>Spain and New Zealand are famous near-antipodal land masses. Only about 15% of the Earth's surface has land on both antipodal ends.</p>
-        <figure class="sketch-credit">
+  <section class="px-6 pb-6">
+    <details class="about-details bg-white rounded-xl shadow-sm overflow-hidden" open>
+      <summary class="flex items-center px-5 py-4 cursor-pointer select-none hover:bg-slate-50 transition-colors border-b border-transparent">
+        <h2 class="text-base font-bold">What is an antipode?</h2>
+      </summary>
+      <div class="px-5 py-5 flex flex-col gap-3">
+        <p class="text-slate-500 text-sm leading-relaxed">Your antipode is the point on Earth's surface directly opposite you — if you could tunnel straight through the center of the planet, you'd pop out there. For most people on land, their antipode is in the middle of the ocean!</p>
+        <p class="text-slate-500 text-sm leading-relaxed">Spain and New Zealand are famous near-antipodal land masses. Only about 15% of the Earth's surface has land on both antipodal ends.</p>
+        <figure class="mt-2">
           <a href="https://sketchplanations.com/antipodes" target="_blank" rel="noopener">
             <img
               src="https://images.prismic.io/sketchplanations/258869f4-24c4-4192-969b-df866b674d9e_160383697001.jpg?auto=compress,format"
               alt="Sketchplanations illustration of antipodes showing a line through Earth, with Spain and New Zealand as examples"
               loading="lazy"
               width="600"
+              class="w-full max-w-lg rounded-lg border border-slate-200 block"
             />
           </a>
-          <figcaption>
-            Illustration by <a href="https://sketchplanations.com/antipodes" target="_blank" rel="noopener">Sketchplanations</a> — used with credit
+          <figcaption class="mt-2 text-xs text-slate-400">
+            Illustration by <a href="https://sketchplanations.com/antipodes" target="_blank" rel="noopener" class="text-blue-500 hover:underline">Sketchplanations</a> — used with credit
           </figcaption>
         </figure>
       </div>
     </details>
   </section>
 
-  <footer>
+  <footer class="py-4 px-6 text-center text-xs text-slate-400 border-t border-slate-200 bg-white mt-auto">
     <p>
-      Map data &copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> contributors.
-      Geocoding by <a href="https://nominatim.org/" target="_blank" rel="noopener">Nominatim</a>.
-      Maps by <a href="https://leafletjs.com/" target="_blank" rel="noopener">Leaflet</a>.
+      Map data &copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener" class="text-blue-500 hover:underline">OpenStreetMap</a> contributors.
+      Geocoding by <a href="https://nominatim.org/" target="_blank" rel="noopener" class="text-blue-500 hover:underline">Nominatim</a>.
+      Maps by <a href="https://leafletjs.com/" target="_blank" rel="noopener" class="text-blue-500 hover:underline">Leaflet</a>.
     </p>
   </footer>
 
-  <div id="toast" class="toast" role="alert" aria-live="polite"></div>
+  <div id="toast" class="toast fixed bottom-6 left-1/2 bg-slate-800 text-white px-5 py-2.5 rounded-full text-sm font-medium pointer-events-none z-[9999] whitespace-nowrap" role="alert" aria-live="polite"></div>
 
   <!-- Leaflet JS -->
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
