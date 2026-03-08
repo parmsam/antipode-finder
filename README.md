@@ -10,11 +10,11 @@ Inspired by the [Sketchplanations post on antipodes](https://sketchplanations.co
 
 - **Dual interactive maps** — click either map to set origin or antipode
 - **Draggable markers** — drag to refine position on both sides
-- **Place search** — search any location on either map (powered by Nominatim)
+- **Place search** — search any location on either map (powered by Photon)
 - **GPS** — use your current location as the origin
 - **Shareable URLs** — location encoded in the URL hash (`#lat=…&lng=…`), copy with the Share button
 - **Fun facts** — shows whether the antipode is ocean or land, and distance through Earth (~12,742 km)
-- **No API keys** — uses OpenStreetMap tiles and Nominatim geocoding
+- **No API keys** — uses OpenStreetMap tiles, Photon, and Nominatim
 
 ## Usage
 
@@ -41,7 +41,8 @@ python3 -m http.server 8080
 |---|---|
 | Maps | [Leaflet.js](https://leafletjs.com/) 1.9 |
 | Tiles | [OpenStreetMap](https://www.openstreetmap.org/) |
-| Geocoding / Search | [Nominatim](https://nominatim.org/) |
+| Place search | [Photon](https://photon.komoot.io/) (by Komoot) |
+| Reverse geocoding | [Nominatim](https://nominatim.org/) |
 | Hosting | GitHub Pages |
 
 No build tools, no bundlers, no frameworks — plain HTML, CSS, and JS loaded from CDN.
@@ -60,5 +61,6 @@ function calcAntipode(lat, lng) {
 ## Attribution
 
 - Map data © [OpenStreetMap](https://www.openstreetmap.org/copyright) contributors
-- Geocoding by [Nominatim](https://nominatim.org/)
+- Place search by [Photon](https://photon.komoot.io/) (Komoot)
+- Reverse geocoding by [Nominatim](https://nominatim.org/)
 - Antipodes illustration by [Sketchplanations](https://sketchplanations.com/antipodes)
