@@ -97,7 +97,7 @@ async function reverseGeocode(lat, lng, side) {
   const url = `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=json`;
   try {
     const res = await fetch(url, {
-      headers: { 'Accept-Language': 'en', 'User-Agent': 'AntipodeFinder/1.0 (https://parmsam.github.io/antipode-finder/)' },
+      headers: { 'Accept-Language': 'en' },
     });
     const data = await res.json();
     const name = buildPlaceName(data);
@@ -174,7 +174,7 @@ async function searchPlace(query, side) {
   const url = `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(query)}&format=json&limit=1`;
   try {
     const res = await fetch(url, {
-      headers: { 'Accept-Language': 'en', 'User-Agent': 'AntipodeFinder/1.0 (https://parmsam.github.io/antipode-finder/)' },
+      headers: { 'Accept-Language': 'en' },
     });
     const results = await res.json();
     if (!results.length) {
@@ -322,4 +322,7 @@ document.getElementById('search-antipode').addEventListener('keydown', (e) => {
 });
 
 // ===== Init =====
+if (window.location.protocol === 'file:') {
+  showToast('Open via a local server (python3 -m http.server) for search to work');
+}
 loadFromHash();
