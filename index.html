@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Antipode Finder — Find Your Point on the Other Side of Earth</title>
+  <meta name="description" content="Find the antipode of any location on Earth — the point directly opposite you on the other side of the planet. No ads, no clutter, no API keys." />
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="Antipode Finder" />
+  <meta property="og:description" content="Find the point on Earth directly opposite any location. Click the map, search a place, or use your GPS." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://parmsam.github.io/antipode-finder/" />
+
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <header>
+    <h1>Antipode Finder</h1>
+    <p class="subtitle">Find the point on Earth directly opposite any location</p>
+  </header>
+
+  <section class="controls">
+    <div class="search-group">
+      <label for="search-origin">Search origin</label>
+      <input type="search" id="search-origin" placeholder="e.g. New York, Paris…" autocomplete="off" />
+    </div>
+    <div class="search-group">
+      <label for="search-antipode">Search antipode</label>
+      <input type="search" id="search-antipode" placeholder="e.g. Sydney, Tokyo…" autocomplete="off" />
+    </div>
+    <div class="control-buttons">
+      <button id="btn-geolocate" title="Use my location">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M1 12h4M19 12h4"/><circle cx="12" cy="12" r="9" stroke-dasharray="4 2"/></svg>
+        My Location
+      </button>
+      <button id="btn-share" title="Copy share link">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+        Share
+      </button>
+    </div>
+  </section>
+
+  <main class="maps">
+    <div class="map-panel map-panel--origin">
+      <div class="map-header map-header--origin">
+        <span class="map-label">Your Location</span>
+        <span class="map-place" id="origin-place">Click the map to begin</span>
+      </div>
+      <div id="map-origin"></div>
+    </div>
+    <div class="map-panel map-panel--antipode">
+      <div class="map-header map-header--antipode">
+        <span class="map-label">Antipode</span>
+        <span class="map-place" id="antipode-place">—</span>
+      </div>
+      <div id="map-antipode"></div>
+    </div>
+  </main>
+
+  <section class="info">
+    <div class="coord-cards">
+      <div class="coord-card coord-card--origin">
+        <div class="coord-card__label">Origin</div>
+        <div class="coord-card__value" id="origin-coords">—</div>
+      </div>
+      <div class="coord-card coord-card--antipode">
+        <div class="coord-card__label">Antipode</div>
+        <div class="coord-card__value" id="antipode-coords">—</div>
+      </div>
+    </div>
+    <div class="facts" id="facts" hidden>
+      <div class="fact">
+        <span class="fact__icon">🌍</span>
+        <span class="fact__text">Distance through Earth: <strong>~12,742 km</strong> (Earth's diameter)</span>
+      </div>
+      <div class="fact" id="fact-ocean">
+        <span class="fact__icon" id="fact-ocean-icon">🌊</span>
+        <span class="fact__text">Your antipode is <strong id="fact-ocean-text">…</strong></span>
+      </div>
+    </div>
+  </section>
+
+  <section class="about">
+    <details open>
+      <summary><h2>What is an antipode?</h2></summary>
+      <div class="about-body">
+        <p>Your antipode is the point on Earth's surface directly opposite you — if you could tunnel straight through the center of the planet, you'd pop out there. For most people on land, their antipode is in the middle of the ocean!</p>
+        <p>Spain and New Zealand are famous near-antipodal land masses. Only about 15% of the Earth's surface has land on both antipodal ends.</p>
+        <figure class="sketch-credit">
+          <a href="https://sketchplanations.com/antipodes" target="_blank" rel="noopener">
+            <img
+              src="https://images.prismic.io/sketchplanations/258869f4-24c4-4192-969b-df866b674d9e_160383697001.jpg?auto=compress,format"
+              alt="Sketchplanations illustration of antipodes showing a line through Earth, with Spain and New Zealand as examples"
+              loading="lazy"
+              width="600"
+            />
+          </a>
+          <figcaption>
+            Illustration by <a href="https://sketchplanations.com/antipodes" target="_blank" rel="noopener">Sketchplanations</a> — used with credit
+          </figcaption>
+        </figure>
+      </div>
+    </details>
+  </section>
+
+  <footer>
+    <p>
+      Map data &copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> contributors.
+      Geocoding by <a href="https://nominatim.org/" target="_blank" rel="noopener">Nominatim</a>.
+      Maps by <a href="https://leafletjs.com/" target="_blank" rel="noopener">Leaflet</a>.
+    </p>
+  </footer>
+
+  <div id="toast" class="toast" role="alert" aria-live="polite"></div>
+
+  <!-- Leaflet JS -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
